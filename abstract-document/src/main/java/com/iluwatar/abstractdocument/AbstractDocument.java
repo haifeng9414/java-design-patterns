@@ -34,39 +34,41 @@ import java.util.stream.Stream;
  */
 public abstract class AbstractDocument implements Document {
 
-  private final Map<String, Object> properties;
+    //保存类的域即域的值，map的key表示域的名字，因为值是Object的，所以可以放任何类型的值
+    private final Map<String, Object> properties;
 
-  protected AbstractDocument(Map<String, Object> properties) {
-    Objects.requireNonNull(properties, "properties map is required");
-    this.properties = properties;
-  }
+    protected AbstractDocument(Map<String, Object> properties) {
+        Objects.requireNonNull(properties, "properties map is required");
+        this.properties = properties;
+    }
 
-  @Override
-  public Void put(String key, Object value) {
-    properties.put(key, value);
-    return null;
-  }
+    @Override
+    public Void put(String key, Object value) {
+        properties.put(key, value);
+        return null;
+    }
 
-  @Override
-  public Object get(String key) {
-    return properties.get(key);
-  }
+    @Override
+    public Object get(String key) {
+        return properties.get(key);
+    }
 
-  @Override
-  public <T> Stream<T> children(String key, Function<Map<String, Object>, T> constructor) {
-    Optional<List<Map<String, Object>>> any = Stream.of(get(key)).filter(el -> el != null)
-        .map(el -> (List<Map<String, Object>>) el).findAny();
-    return any.isPresent() ? any.get().stream().map(constructor) : Stream.empty();
-  }
+    //该方法使得抽象文档模式能够表示具有树形结构树形的类，即该类的某个域也是个拥有多个域的类
+    @Override
+    public <T> Stream<T> children(String key, Function<Map<String, Object>, T> constructor) {
+        Optional<List<Map<String, Object>>> any = Stream.of(get(key)).filter(el -> el != null)
+                .map(el -> (List<Map<String, Object>>) el).findAny();
+        return any.isPresent() ? any.get().stream().map(constructor) : Stream.empty();
+    }
 
-  @Override
-  public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append(getClass().getName()).append("[");
-    properties.entrySet()
-        .forEach(e -> builder.append("[").append(e.getKey()).append(" : ").append(e.getValue()).append("]"));
-    builder.append("]");
-    return builder.toString();
-  }
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(getClass().getName()).append("[");
+        properties.entrySet()
+                .forEach(e -> builder.append("[").append(e.getKey()).append(" : ").append(e.getValue()).append("]"));
+        builder.append("]");
+        return builder.toString();
+    }
 
 }

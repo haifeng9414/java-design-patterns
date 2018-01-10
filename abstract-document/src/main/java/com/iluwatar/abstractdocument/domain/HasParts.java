@@ -31,10 +31,13 @@ import com.iluwatar.abstractdocument.Document;
  */
 public interface HasParts extends Document {
 
-  String PROPERTY = "parts";
+    String PROPERTY = "parts";
 
-  default Stream<Part> getParts() {
-    return children(PROPERTY, Part::new);
-  }
+    default Stream<Part> getParts() {
+        //children方法的第二个参数是Function<Map<String, Object>, T> constructor，该参数表示需要一个Function，该Function能够从
+        //Map<String, Object>类型的对象中返回T类型的对象，而getParts方法中T为Part，所以需要一个Function能够将Map<String, Object>
+        //转化为Part，而Part的构造方法就可以完成这个功能，::符号获取方法的引用，返回一个Function。
+        return children(PROPERTY, Part::new);
+    }
 
 }

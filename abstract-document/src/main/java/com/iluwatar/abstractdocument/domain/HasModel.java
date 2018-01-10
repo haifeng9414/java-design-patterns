@@ -31,10 +31,18 @@ import com.iluwatar.abstractdocument.Document;
  */
 public interface HasModel extends Document {
 
-  String PROPERTY = "model";
+    String PROPERTY = "model";
 
-  default Optional<String> getModel() {
-    return Optional.ofNullable((String) get(PROPERTY));
-  }
+    //原始版本是没有这个方法的，加上这个方法的好处是设置model域时不用像DomainTest中写的
+    //carProperties.put(HasModel.PROPERTY, TEST_CAR_MODEL);
+    //这种形式来设置域，可以用car.setModel(TEST_CAR_MODEL)达到同样的效果。同时用setModel方法也限定了参数类型必须满足Model的类型。
+    //而carProperties.put(HasModel.PROPERTY, TEST_CAR_MODEL)是没法限制的
+    default Void setModel(String model) {
+        return put(PROPERTY, model);
+    }
+
+    default Optional<String> getModel() {
+        return Optional.ofNullable((String) get(PROPERTY));
+    }
 
 }
