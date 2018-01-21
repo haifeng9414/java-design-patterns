@@ -32,8 +32,8 @@ public class FishingBoatAdapter implements RowingBoat {
 
   private FishingBoat boat;
 
-  public FishingBoatAdapter() {
-    boat = new FishingBoat();
+  public FishingBoatAdapter(FishingBoat boat) {
+    this.boat = boat;
   }
 
   @Override
