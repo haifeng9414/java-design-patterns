@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
  * In Balking Design Pattern if an object’s method is invoked when it is in an inappropriate state,
  * then the method will return without doing anything. Objects that use this pattern are generally only in a
  * state that is prone to balking temporarily but for an unknown amount of time
- *
+ * <p>
  * In this example implementation WashingMachine is an object that has two states
  * in which it can be: ENABLED and WASHING. If the machine is ENABLED
  * the state is changed into WASHING that any other thread can't invoke this action on this and then do the job.
@@ -43,23 +43,27 @@ import java.util.concurrent.TimeUnit;
 
 public class App {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
-  /**
-   * @param args the command line arguments - not used
-   */
-  public static void main(String... args) {
-    final WashingMachine washingMachine = new WashingMachine();
-    ExecutorService executorService = Executors.newFixedThreadPool(3);
-    for (int i = 0; i < 3; i++) {
-      executorService.execute(washingMachine::wash);
+    /**
+     * @param args the command line arguments - not used
+     */
+    public static void main(String... args) {
+
+        //下面的例子用3个线程一块调用washingMachine对象的wash，这个模式实际就是在
+        //washingMachine里添加一个属性用于记录washingMachine的状态，运行wash时判断下
+        //当前状态是否可以执行下去
+        final WashingMachine washingMachine = new WashingMachine();
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        for (int i = 0; i < 3; i++) {
+            executorService.execute(washingMachine::wash);
+        }
+        executorService.shutdown();
+        try {
+            executorService.awaitTermination(10, TimeUnit.SECONDS);
+        } catch (InterruptedException ie) {
+            LOGGER.error("ERROR: Waiting on executor service shutdown!");
+        }
     }
-    executorService.shutdown();
-    try {
-      executorService.awaitTermination(10, TimeUnit.SECONDS);
-    } catch (InterruptedException ie) {
-      LOGGER.error("ERROR: Waiting on executor service shutdown!");
-    }
-  }
 
 }
