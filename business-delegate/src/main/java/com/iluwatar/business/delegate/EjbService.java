@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class EjbService implements BusinessService {
-
   private static final Logger LOGGER = LoggerFactory.getLogger(EjbService.class);
 
   @Override

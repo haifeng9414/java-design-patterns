@@ -27,15 +27,15 @@ package com.iluwatar.business.delegate;
  * Client utilizes BusinessDelegate to call the business tier
  *
  */
-public class Client {
+public class Client extends BusinessDelegate {
 
-  private BusinessDelegate businessDelegate;
+    private BusinessDelegate businessDelegate;
 
-  public Client(BusinessDelegate businessDelegate) {
-    this.businessDelegate = businessDelegate;
-  }
+    public Client(BusinessDelegate businessDelegate) {
+        this.businessDelegate = businessDelegate;
+    }
 
-  public void doTask() {
-    businessDelegate.doTask();
-  }
+    public void doTask() {
+        businessDelegate.doTask();
+    }
 }
